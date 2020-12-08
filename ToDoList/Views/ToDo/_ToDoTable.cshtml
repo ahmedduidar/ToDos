@@ -1,0 +1,166 @@
+﻿@model IEnumerable<DAL.Tables.ToDo>
+
+<div id="toDoProgressBar" class="col-md-10, text-center">
+    <div class="row">
+        <div class="col-md-1">@(ViewBag.Percent)%</div>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar"
+                 style="width:@Html.AttributeEncode(ViewBag.Percent)%">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal hide fade in" id="edit-person">
+    <div id="edit-person-container"></div>
+</div>
+
+<table class="table">
+    <tr>
+        <th>Task</th>
+        <th>Is Done</th>
+        <th>Due to date</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+
+        <tr>
+
+            <td>
+                @if (!item.IsDone)
+                {
+                    @Html.DisplayFor(modelItem => item.Description)
+                }
+                else
+                {
+                    <div class="completedToDo">
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </div>
+                }
+            </td>
+
+            <td>
+                @Html.CheckBoxFor(modelItem => item.IsDone, new { id = item.Id, @class = "ActiveCheck" })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |*@
+                <button class="btn btn-primary edit-person" data-id="@item.Id">Edit</button> 
+
+                <a id="deleteItem" class="deleteItem btn btn-primary edit-person" data-target="#basic"
+                   data-toggle="modal"
+                   data-path="@Url.Action("Delete", "ToDo", new { id = item.Id })">Delete</a>
+                @*@Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
+            </td>
+        </tr>
+    }
+
+</table>
+@*DELETE*@
+<div class="modal fade" id="basic" tabindex="-1" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Delete Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete this item?
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" type="button" class="btn btn-default">Cancel</button>
+                <button id="btnContinueDelete" type="button" class="btn btn-primary">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*Edit*@
+
+
+<div class="modal fade" id="edit" tabindex="-1" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content" id="xx">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Edit</h4>
+            </div>
+
+            @using (Ajax.BeginForm("AJAXEdit", "ToDo", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace }))
+            {
+                <div class="modal-body">
+
+                    <label>Task</label>
+                    @*@Html.EditorFor(item.Description, new { htmlAttributes = new { @class = "form-control" } })*@
+                    <input type="text" class="form-control" value="" />
+                    <br />
+                    <label> Due To Date</label>
+                    @*@Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })*@
+                    <input type="text" class="form-control" value="" />
+
+                </div>
+                <div class="modal-footer">
+                    <button data-dismiss="modal" type="button" class="btn btn-default">Cancel</button>
+                    <button id="btnContinueEdit" type="submit" class="btn btn-primary">Edit</button>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+<script src="~/Custom_Scripts/AddCheckBoxListener.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.edit-person').click(function () {
+            var url = "/ToDo/Edit"; // the url to the controller
+            var id = $(this).attr('data-id'); // the id that's given to each button in the list
+            $.get(url + '/' + id, function (data) {
+                $('#xx').html(data);
+                $('#edit').modal('show');
+            });
+        });
+    });
+</script>
+<script>
+    var path_to_delete;
+
+    $(".deleteItem").click(function (e) {
+        path_to_delete = $(this).data('path');
+    });
+
+    $('#btnContinueDelete').click(function () {
+        window.location = path_to_delete;
+    });
+</script>
+<script>
+    var path_to_edit;
+
+    $(".editItem").click(function (e) {
+        path_to_edit = $(this).data('path');
+    });
+
+    $('#btnContinueEdit').click(function () {
+        window.location = path_to_edit;
+    });
+</script>
+<script>
+    $('#editItem').on('click', function () {
+        var myModal = $('#edit');
+
+        // now get the values from the table
+        var description = $(this).closest('tr').find('td.Description').html();
+        var date = $(this).closest('tr').find('td.Date').html();
+
+
+        // and set them in the modal:
+        $('.Description', myModal).val(description);
+        $('.Date', myModal).val(date);
+
+
+        // and finally show the modal
+        myModal.modal({ show: true });
+
+        return false;
+    });
+</script>
