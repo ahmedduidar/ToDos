@@ -1,6 +1,6 @@
-# To Do List with ASP.NET MVC (Still in progress)
+# To Do List with ASP.NET MVC 
 
-Source codes of my web site that I designed with ASP.NET MVC for creating to do lists .
+Source codes of my web app that I designed with ASP.NET MVC for creating to do lists .
 
 I am designing this site for self learning. I have not so much knowledge about all technologies that I used(ajax for example), but I used them for a purpose and learned what is needed for that purpose. The site is still in progress so probably I will learn much more things in the progress.
 
