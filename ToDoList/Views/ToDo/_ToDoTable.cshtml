@@ -45,19 +45,17 @@
                 @Html.DisplayFor(modelItem => item.Date)
             </td>
             <td>
-                @*@Html.ActionLink("Edit", "Edit", new { id = item.Id }) |*@
                 <button class="btn btn-primary edit-person" data-id="@item.Id">Edit</button> 
 
                 <a id="deleteItem" class="deleteItem btn btn-primary edit-person" data-target="#basic"
                    data-toggle="modal"
                    data-path="@Url.Action("Delete", "ToDo", new { id = item.Id })">Delete</a>
-                @*@Html.ActionLink("Delete", "Delete", new { id = item.Id })*@
             </td>
         </tr>
     }
 
 </table>
-@*DELETE*@
+                                                           @*DELETE*@
 <div class="modal fade" id="basic" tabindex="-1" aria-hidden="true" style="display: none;">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -75,6 +73,9 @@
         </div>
     </div>
 </div>
+
+
+
 @*Edit*@
 
 
@@ -85,25 +86,6 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                 <h4 class="modal-title">Edit</h4>
             </div>
-
-            @using (Ajax.BeginForm("AJAXEdit", "ToDo", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace }))
-            {
-                <div class="modal-body">
-
-                    <label>Task</label>
-                    @*@Html.EditorFor(item.Description, new { htmlAttributes = new { @class = "form-control" } })*@
-                    <input type="text" class="form-control" value="" />
-                    <br />
-                    <label> Due To Date</label>
-                    @*@Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })*@
-                    <input type="text" class="form-control" value="" />
-
-                </div>
-                <div class="modal-footer">
-                    <button data-dismiss="modal" type="button" class="btn btn-default">Cancel</button>
-                    <button id="btnContinueEdit" type="submit" class="btn btn-primary">Edit</button>
-                </div>
-            }
 
         </div>
     </div>
