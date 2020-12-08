@@ -54,17 +54,10 @@ namespace ToDoList.Controllers
         {
             var model = new EditToDoVM();
             model.Id = id;
-            //if (id == null)
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
-            //ToDo toDo = db.ToDos.Find(id);
-            //if (toDo == null)
-            //{
-            //    return HttpNotFound();
-            //}
+
             return PartialView("_EditParital", model);
         }
+
         // GET: ToDo/Details/5
         public ActionResult Details(int? id)
         {
@@ -86,12 +79,10 @@ namespace ToDoList.Controllers
             return View();
         }
 
-        // POST: ToDo/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+  
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Description,IsDone,Date")] ToDo toDo)
+        public ActionResult Create(ToDo toDo)
         {
             if (ModelState.IsValid)
             {
@@ -124,7 +115,6 @@ namespace ToDoList.Controllers
                 db.SaveChanges();
             }
 
-            //return PartialView("_ToDoTable", GetToDos());
             return RedirectToAction("Index");
         }
 
@@ -153,9 +143,6 @@ namespace ToDoList.Controllers
             return View(toDo);
         }
 
-        // POST: ToDo/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(ToDo toDo)
@@ -169,6 +156,7 @@ namespace ToDoList.Controllers
             return View(toDo);
         }
 
+        //Edit to do
         [HttpPost]
         public ActionResult AJAXEdit(int? id, bool value)
         {
